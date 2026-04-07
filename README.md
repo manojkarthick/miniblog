@@ -21,19 +21,21 @@ git clone https://github.com/[YOUR_USERNAME]/[YOUR_REPO_NAME].git
 cd [YOUR_REPO_NAME]
 ```
 
-3. Install dependencies:
+3. Use Node.js 22.12.0 or newer.
+
+4. Install dependencies:
 
 ```bash
 pnpm install
 ```
 
-4. Start the development server:
+5. Start the development server:
 
 ```bash
 pnpm dev
 ```
 
-5. Optionally, format your code after making changes:
+6. Optionally, format your code after making changes:
 
 ```bash
 pnpm format
