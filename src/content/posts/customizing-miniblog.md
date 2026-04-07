@@ -6,7 +6,7 @@ date: "Nov 26 2024"
 
 ## Blog Posts
 
-All blog posts should be saved as [Markdown](https://www.markdownguide.org/) or [MDX](https://mdxjs.com/) files within the `src/content/posts/` directory, and have valid frontmatter as defined by the `posts` content collection in the `src/content/config.ts` file. Here's an example of what valid frontmatter would look like:
+All blog posts should be saved as [Markdown](https://www.markdownguide.org/) or [MDX](https://mdxjs.com/) files within the `src/content/posts/` directory, and have valid frontmatter as defined by the `posts` content collection in the `src/content.config.ts` file. Here's an example of what valid frontmatter would look like:
 
 ```
 ---
