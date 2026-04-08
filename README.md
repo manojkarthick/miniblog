@@ -79,7 +79,7 @@ Customize Markdown styles in `src/styles/global.css`.
 
 ## Template Changes In This Fork
 
-These merged PRs are already included for users starting from this template:
+These PRs are included in this fork for users starting from this template:
 
 - [#1](https://github.com/manojkarthick/miniblog/pull/1) Migrate from npm to pnpm, add lockfile, and configure Corepack compatibility.
 - [#2](https://github.com/manojkarthick/miniblog/pull/2) Upgrade to Astro 6 and Tailwind CSS 4, including content layer and API migrations.
@@ -89,6 +89,8 @@ These merged PRs are already included for users starting from this template:
 - [#7](https://github.com/manojkarthick/miniblog/pull/7) Add GitHub-style markdown callouts (`[!NOTE]`, `[!TIP]`, `[!WARNING]`, etc.).
 - [#8](https://github.com/manojkarthick/miniblog/pull/8) Persist light/dark theme selection and keep code block themes in sync.
 - [#10](https://github.com/manojkarthick/miniblog/pull/10) Add `::github` directive cards for repos/users with miniblog-native styling.
+- [#13](https://github.com/manojkarthick/miniblog/pull/13) Replace the remark directive plugin with a single self-contained `GithubCard.astro` MDX component.
+- [#14](https://github.com/manojkarthick/miniblog/pull/14) Replace `astro-icon` with `unplugin-icons` for homepage social icons while preserving styling and hover behavior.
 
 ## License
 
