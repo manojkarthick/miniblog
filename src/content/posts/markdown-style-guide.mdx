@@ -4,6 +4,8 @@ description: "Here is a sample of some basic Markdown syntax that can be used wh
 date: "Nov 07 2024"
 ---
 
+import GithubCard from "../../components/GithubCard.astro";
+
 # H1
 
 ## H2
@@ -23,7 +25,7 @@ Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sap
 ![blog placeholder](/static/blog-placeholder.png)
 
 <video controls>
-  <source src="/static/dynamic-island-animation.mp4" type="video/mp4">
+  <source src="/static/dynamic-island-animation.mp4" type="video/mp4" />
 </video>
 
 > Tiam, ad mint andaepu dandae nostion secatur sequo quae.
@@ -48,29 +50,31 @@ Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sap
 
 ## GitHub Cards
 
-Use the `::github` directive to embed a live GitHub card.
+Import the `GithubCard` component and pass a `repo` or `user` prop.
 
-```md
-::github{repo="chrismwilliams/astro-theme-cactus"}
+```mdx
+import GithubCard from "../../components/GithubCard.astro";
+
+<GithubCard repo="chrismwilliams/astro-theme-cactus" />
 ```
 
-::github{repo="chrismwilliams/astro-theme-cactus"}
+<GithubCard repo="chrismwilliams/astro-theme-cactus" />
 
-The directive also accepts a full GitHub URL and normalizes it.
+The component also accepts a full GitHub URL and normalizes it.
 
-```md
-::github{repo="https://github.com/withastro/astro/"}
+```mdx
+<GithubCard repo="https://github.com/withastro/astro/" />
 ```
 
-::github{repo="https://github.com/withastro/astro/"}
+<GithubCard repo="https://github.com/withastro/astro/" />
 
 You can render user profile cards too:
 
-```md
-::github{user="withastro"}
+```mdx
+<GithubCard user="withastro" />
 ```
 
-::github{user="withastro"}
+<GithubCard user="withastro" />
 
 | Italics   | Bold     | Code   |
 | --------- | -------- | ------ |
