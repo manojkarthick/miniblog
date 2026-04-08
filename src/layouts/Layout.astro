@@ -9,9 +9,12 @@ interface Props {
   description: string;
   image?: string;
   className?: string;
+  canonicalURL?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const resolvedCanonicalURL = Astro.props.canonicalURL
+  ? new URL(Astro.props.canonicalURL, Astro.site)
+  : new URL(Astro.url.pathname, Astro.site);
 
 const {
   title,
@@ -46,7 +49,7 @@ const {
     />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href={canonicalURL} />
+    <link rel="canonical" href={resolvedCanonicalURL} />
 
     <!-- Primary Meta Tags -->
     <title>{title}</title>
@@ -67,6 +70,38 @@ const {
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+    <!-- Theme (must run before body paints to prevent flash) -->
+    <script is:inline>
+      const THEME_STORAGE_KEY = "theme";
+
+      const applyTheme = (theme) => {
+        const isDark = theme === "dark";
+        document.documentElement.classList.toggle("dark", isDark);
+        document.documentElement.classList.toggle("light", !isDark);
+      };
+
+      const getTheme = () => {
+        if (typeof localStorage !== "undefined") {
+          const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+          if (savedTheme === "dark" || savedTheme === "light") {
+            return savedTheme;
+          }
+        }
+
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      };
+
+      const setTheme = () => {
+        applyTheme(getTheme());
+      };
+
+      setTheme();
+
+      document.addEventListener("astro:after-swap", setTheme);
+    </script>
+
     <ClientRouter />
   </head>
   <body
@@ -78,34 +113,3 @@ const {
     </div>
   </body>
 </html>
-
-<script is:inline>
-  const THEME_STORAGE_KEY = "theme";
-
-  const applyTheme = (theme) => {
-    const isDark = theme === "dark";
-    document.documentElement.classList.toggle("dark", isDark);
-    document.documentElement.classList.toggle("light", !isDark);
-  };
-
-  const getTheme = () => {
-    if (typeof localStorage !== "undefined") {
-      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-      if (savedTheme === "dark" || savedTheme === "light") {
-        return savedTheme;
-      }
-    }
-
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  };
-
-  const setTheme = () => {
-    applyTheme(getTheme());
-  };
-
-  setTheme();
-
-  document.addEventListener("astro:after-swap", setTheme);
-</script>
