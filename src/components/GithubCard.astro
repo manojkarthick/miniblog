@@ -1,0 +1,289 @@
+---
+interface Props {
+  repo?: string;
+  user?: string;
+}
+
+const { repo, user } = Astro.props;
+
+const normalize = (value: string) =>
+  value
+    .trim()
+    .replace(/^https?:\/\/github\.com\//, "")
+    .replace(/\/+$/, "");
+
+const raw = repo ?? user ?? "";
+const normalized = normalize(raw);
+const parts = normalized.split("/").filter(Boolean);
+
+const isRepo = !!repo && parts.length >= 2;
+const repoName = isRepo ? `${parts[0]}/${parts[1]}` : undefined;
+const username = !isRepo && parts.length >= 1 ? parts[0] : undefined;
+const displayName = repoName ?? username ?? normalized;
+const href = `https://github.com/${displayName}`;
+---
+
+{
+  isRepo && repoName ? (
+    <div class="github-card gh-loading" data-github-repo={repoName}>
+      <div class="gh-title">
+        <span class="gh-avatar" />
+        <a class="gh-text" href={href}>
+          {repoName}
+        </a>
+        <span class="gh-icon" />
+      </div>
+      <div class="gh-description">Loading repository details...</div>
+      <div class="gh-chips">
+        <span class="gh-stars">...</span>
+        <span class="gh-forks">...</span>
+        <span class="gh-license">...</span>
+        <span class="gh-language">...</span>
+      </div>
+    </div>
+  ) : username ? (
+    <div class="github-card gh-simple gh-loading" data-github-user={username}>
+      <div class="gh-title">
+        <span class="gh-avatar" />
+        <a class="gh-text" href={href}>
+          {username}
+        </a>
+        <span class="gh-icon" />
+      </div>
+      <div class="gh-chips">
+        <span class="gh-followers">...</span>
+        <span class="gh-repositories">...</span>
+        <span class="gh-region">...</span>
+      </div>
+    </div>
+  ) : null
+}
+
+<script>
+  const formatCompact = Intl.NumberFormat(undefined, {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format;
+
+  function initRepoCard(card: Element) {
+    const repo = card.getAttribute("data-github-repo");
+    if (!repo) return;
+
+    fetch(`https://api.github.com/repos/${repo}`, {
+      referrerPolicy: "no-referrer",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        card.classList.remove("gh-loading");
+
+        const descriptionEl = card.querySelector(".gh-description");
+        if (descriptionEl) {
+          if (data.description) {
+            (descriptionEl as HTMLElement).textContent = String(
+              data.description,
+            ).replace(/:[a-zA-Z0-9_]+:/g, "");
+          } else {
+            (descriptionEl as HTMLElement).style.display = "none";
+          }
+        }
+
+        const languageEl = card.querySelector(".gh-language");
+        if (languageEl) {
+          if (data.language) {
+            languageEl.textContent = data.language;
+          } else {
+            (languageEl as HTMLElement).style.display = "none";
+          }
+        }
+
+        const forksEl = card.querySelector(".gh-forks");
+        if (forksEl) {
+          forksEl.textContent = formatCompact(
+            Number(data.forks ?? 0),
+          ).replaceAll("\u202f", "");
+        }
+
+        const starsEl = card.querySelector(".gh-stars");
+        if (starsEl) {
+          starsEl.textContent = formatCompact(
+            Number(data.stargazers_count ?? 0),
+          ).replaceAll("\u202f", "");
+        }
+
+        const avatarEl = card.querySelector(".gh-avatar") as HTMLElement | null;
+        if (avatarEl && data.owner?.avatar_url) {
+          avatarEl.style.backgroundImage = `url(${data.owner.avatar_url})`;
+        }
+
+        const licenseEl = card.querySelector(".gh-license");
+        if (licenseEl) {
+          if (data.license?.spdx_id) {
+            licenseEl.textContent = data.license.spdx_id;
+          } else {
+            (licenseEl as HTMLElement).style.display = "none";
+          }
+        }
+      })
+      .catch((error) => {
+        card.classList.remove("gh-loading");
+        card.classList.add("gh-error");
+
+        const descriptionEl = card.querySelector(".gh-description");
+        if (descriptionEl) {
+          descriptionEl.textContent =
+            "Unable to load repository details right now.";
+          (descriptionEl as HTMLElement).style.display = "";
+        }
+
+        console.warn(`[GITHUB-CARD] Error loading card for ${repo}.`, error);
+      });
+  }
+
+  function initUserCard(card: Element) {
+    const username = card.getAttribute("data-github-user");
+    if (!username) return;
+
+    fetch(`https://api.github.com/users/${username}`, {
+      referrerPolicy: "no-referrer",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        card.classList.remove("gh-loading");
+
+        const avatarEl = card.querySelector(".gh-avatar") as HTMLElement | null;
+        if (avatarEl && data.avatar_url) {
+          avatarEl.style.backgroundImage = `url(${data.avatar_url})`;
+        }
+
+        const followersEl = card.querySelector(".gh-followers");
+        if (followersEl) {
+          followersEl.textContent = formatCompact(
+            Number(data.followers ?? 0),
+          ).replaceAll("\u202f", "");
+        }
+
+        const repositoriesEl = card.querySelector(".gh-repositories");
+        if (repositoriesEl) {
+          repositoriesEl.textContent = formatCompact(
+            Number(data.public_repos ?? 0),
+          ).replaceAll("\u202f", "");
+        }
+
+        const regionEl = card.querySelector(".gh-region");
+        if (regionEl) {
+          if (data.location) {
+            regionEl.textContent = data.location;
+          } else {
+            (regionEl as HTMLElement).style.display = "none";
+          }
+        }
+      })
+      .catch((error) => {
+        card.classList.remove("gh-loading");
+        card.classList.add("gh-error");
+        console.warn(
+          `[GITHUB-CARD] Error loading card for ${username}.`,
+          error,
+        );
+      });
+  }
+
+  function initGithubCards() {
+    document
+      .querySelectorAll(".github-card.gh-loading[data-github-repo]")
+      .forEach(initRepoCard);
+    document
+      .querySelectorAll(".github-card.gh-loading[data-github-user]")
+      .forEach(initUserCard);
+  }
+
+  initGithubCards();
+  document.addEventListener("astro:page-load", initGithubCards);
+</script>
+
+<style is:global>
+  @reference "tailwindcss";
+
+  .github-card {
+    @apply my-4 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4 text-sm text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-200;
+  }
+  .github-card .gh-title {
+    @apply relative flex items-center gap-2.5 text-base font-medium text-zinc-900 dark:text-zinc-100;
+  }
+  .github-card .gh-title .gh-avatar {
+    @apply h-8 w-8 shrink-0 rounded-full bg-zinc-200 bg-cover bg-center dark:bg-zinc-700;
+  }
+  .github-card .gh-title .gh-text {
+    @apply min-w-0 truncate text-zinc-900 no-underline hover:underline dark:text-zinc-100;
+  }
+  .github-card .gh-title .gh-text:after {
+    @apply absolute inset-0 content-[''];
+  }
+  .github-card .gh-title .gh-icon {
+    @apply pointer-events-none ml-auto h-5 w-5 shrink-0 bg-zinc-500 dark:bg-zinc-400;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='31' height='32' viewBox='0 0 496 512'><path d='M165.9 397.4c0 2-2.3 3.6-5.2 3.6c-3.3.3-5.6-1.3-5.6-3.6c0-2 2.3-3.6 5.2-3.6c3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9c2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9c.3 2 2.9 3.3 5.9 2.6c2.9-.7 4.9-2.6 4.6-4.6c-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2c12.8 2.3 17.3-5.6 17.3-12.1c0-6.2-.3-40.4-.3-61.4c0 0-70 15-84.7-29.8c0 0-11.4-29.1-27.8-36.6c0 0-22.9-15.7 1.6-15.4c0 0 24.9 2 38.6 25.8c21.9 38.6 58.6 27.5 72.9 20.9c2.3-16 8.8-27.1 16-33.7c-55.9-6.2-112.3-14.3-112.3-110.5c0-27.5 7.6-41.3 23.6-58.9c-2.6-6.5-11.1-33.3 2.6-67.9c20.9-6.5 69 27 69 27c20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27c13.7 34.7 5.2 61.4 2.6 67.9c16 17.7 25.8 31.5 25.8 58.9c0 96.5-58.9 104.2-114.8 110.5c9.2 7.9 17 22.9 17 46.4c0 33.7-.3 75.4-.3 83.6c0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252C496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2c1.6 1.6 3.9 2.3 5.2 1c1.3-1 1-3.3-.7-5.2c-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9c1.6 1 3.6.7 4.3-.7c.7-1.3-.3-2.9-2.3-3.9c-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2c2.3 2.3 5.2 2.6 6.5 1c1.3-1.3.7-4.3-1.3-6.2c-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9c1.6 2.3 4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2c-1.4-2.3-4-3.3-5.6-2'/></svg>")
+      center center / 20px auto no-repeat;
+  }
+  .github-card .gh-description {
+    @apply mt-3 leading-relaxed text-zinc-600 dark:text-zinc-300;
+  }
+  .github-card .gh-chips {
+    @apply mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400;
+  }
+  .github-card .gh-chips .gh-stars,
+  .github-card .gh-chips .gh-forks,
+  .github-card .gh-chips .gh-license,
+  .github-card .gh-chips .gh-followers,
+  .github-card .gh-chips .gh-repositories,
+  .github-card .gh-chips .gh-language,
+  .github-card .gh-chips .gh-region {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900;
+  }
+  .github-card .gh-chips .gh-stars:before,
+  .github-card .gh-chips .gh-forks:before,
+  .github-card .gh-chips .gh-license:before,
+  .github-card .gh-chips .gh-followers:before,
+  .github-card .gh-chips .gh-repositories:before {
+    @apply block h-4 w-4 bg-zinc-500 content-[''] dark:bg-zinc-400;
+    mask: var(--gh-chip-icon) center center / 14px auto no-repeat;
+  }
+  .github-card .gh-chips .gh-stars {
+    --gh-chip-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='16' viewBox='0 0 16 16' width='16'><path d='M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z'/></svg>");
+  }
+  .github-card .gh-chips .gh-forks {
+    --gh-chip-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='16' viewBox='0 0 16 16' width='16'><path d='M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0Z'/></svg>");
+  }
+  .github-card .gh-chips .gh-license {
+    --gh-chip-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='16' viewBox='0 0 16 16' width='16'><path d='M8.75.75V2h.985c.304 0 .603.08.867.231l1.29.736c.038.022.08.033.124.033h2.234a.75.75 0 0 1 0 1.5h-.427l2.111 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.006.005-.01.01-.045.04c-.21.176-.441.327-.686.45C14.556 10.78 13.88 11 13 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L12.178 4.5h-.162c-.305 0-.604-.079-.868-.231l-1.29-.736a.245.245 0 0 0-.124-.033H8.75V13h2.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h2.5V3.5h-.984a.245.245 0 0 0-.124.033l-1.289.737c-.265.15-.564.23-.869.23h-.162l2.112 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.016.015-.045.04c-.21.176-.441.327-.686.45C4.556 10.78 3.88 11 3 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L2.178 4.5H1.75a.75.75 0 0 1 0-1.5h2.234a.249.249 0 0 0 .125-.033l1.288-.737c.265-.15.564-.23.869-.23h.984V.75a.75.75 0 0 1 1.5 0Z'/></svg>");
+  }
+  .github-card .gh-chips .gh-followers {
+    --gh-chip-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='16' viewBox='0 0 16 16' width='16'><path d='M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5Z'/></svg>");
+  }
+  .github-card .gh-chips .gh-repositories {
+    --gh-chip-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='16' viewBox='0 0 16 16' width='16'><path d='M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5V2.5Z'/></svg>");
+  }
+  .github-card .gh-chips .gh-language,
+  .github-card .gh-chips .gh-region {
+    @apply ml-auto;
+  }
+  .github-card.gh-loading .gh-title .gh-avatar,
+  .github-card.gh-loading .gh-description,
+  .github-card.gh-loading .gh-chips span {
+    @apply animate-pulse rounded-lg bg-zinc-200 text-transparent dark:bg-zinc-700;
+  }
+  .github-card.gh-loading .gh-chips span:before {
+    @apply bg-transparent;
+  }
+  .github-card.gh-error {
+    @apply border-red-300 bg-red-50/50 dark:border-red-900 dark:bg-red-950/20;
+  }
+  .github-card.gh-error .gh-description {
+    @apply text-red-700 dark:text-red-300;
+  }
+</style>
