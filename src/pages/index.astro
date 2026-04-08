@@ -1,5 +1,6 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import { Icon } from "astro-icon/components";
+import { SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from "../consts";
 import Layout from "../layouts/Layout.astro";
 ---
 
@@ -35,5 +36,19 @@ import Layout from "../layouts/Layout.astro";
         class="text-blue-500 underline">GitHub repository</a
       >.
     </p>
+    <div class="flex gap-3">
+      {
+        SOCIAL_LINKS.map(({ icon, url, label }) => (
+          <a
+            href={url}
+            target="_blank"
+            aria-label={label}
+            class="text-current opacity-60 transition-opacity hover:opacity-100"
+          >
+            <Icon name={`simple-icons:${icon}`} size={18} />
+          </a>
+        ))
+      }
+    </div>
   </main>
 </Layout>
