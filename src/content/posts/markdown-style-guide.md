@@ -46,6 +46,32 @@ Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sap
 > [!CAUTION]
 > This is a caution callout for dangerous actions.
 
+## GitHub Cards
+
+Use the `::github` directive to embed a live GitHub card.
+
+```md
+::github{repo="chrismwilliams/astro-theme-cactus"}
+```
+
+::github{repo="chrismwilliams/astro-theme-cactus"}
+
+The directive also accepts a full GitHub URL and normalizes it.
+
+```md
+::github{repo="https://github.com/withastro/astro/"}
+```
+
+::github{repo="https://github.com/withastro/astro/"}
+
+You can render user profile cards too:
+
+```md
+::github{user="withastro"}
+```
+
+::github{user="withastro"}
+
 | Italics   | Bold     | Code   |
 | --------- | -------- | ------ |
 | _italics_ | **bold** | `code` |

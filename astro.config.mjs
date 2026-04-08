@@ -9,9 +9,11 @@ import tailwindcss from "@tailwindcss/vite";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import remarkGithubBlockquoteAlert from "remark-github-blockquote-alert";
+import remarkDirective from "remark-directive";
 import sitemap from "@astrojs/sitemap";
 
 import { SITE_URL } from "./src/consts";
+import { remarkGithubCard } from "./src/plugins/remark-github-card";
 
 // https://astro.build/config
 export default defineConfig({
@@ -38,7 +40,11 @@ export default defineConfig({
     sitemap(),
   ],
   markdown: {
-    remarkPlugins: [remarkGithubBlockquoteAlert],
+    remarkPlugins: [
+      remarkGithubBlockquoteAlert,
+      remarkDirective,
+      remarkGithubCard,
+    ],
     rehypePlugins: [
       rehypeSlug,
       [

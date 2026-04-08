@@ -88,6 +88,7 @@ These merged PRs are already included for users starting from this template:
 - [#6](https://github.com/manojkarthick/miniblog/pull/6) Add anchor links to post section headings for easier deep-linking.
 - [#7](https://github.com/manojkarthick/miniblog/pull/7) Add GitHub-style markdown callouts (`[!NOTE]`, `[!TIP]`, `[!WARNING]`, etc.).
 - [#8](https://github.com/manojkarthick/miniblog/pull/8) Persist light/dark theme selection and keep code block themes in sync.
+- [#10](https://github.com/manojkarthick/miniblog/pull/10) Add `::github` directive cards for repos/users with miniblog-native styling.
 
 ## License
 
