@@ -29,15 +29,29 @@
 </button>
 
 <script>
+  const THEME_STORAGE_KEY = "theme";
+
+  const toggleTheme = () => {
+    const isDark = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.classList.toggle("light", !isDark);
+
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
+    }
+  };
+
   const setListener = () => {
     const button = document.getElementById("theme-toggle");
 
-    button?.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-    });
+    if (!button) return;
+
+    // Astro client-side swaps can re-run this script; keep one click handler.
+    button.removeEventListener("click", toggleTheme);
+    button.addEventListener("click", toggleTheme);
   };
 
   setListener();
 
-  document.addEventListener("astro:after-swap", setListener);
+  document.addEventListener("astro:page-load", setListener);
 </script>
