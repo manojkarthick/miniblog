@@ -26,8 +26,25 @@ Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sap
   <source src="/static/dynamic-island-animation.mp4" type="video/mp4">
 </video>
 
-> Tiam, ad mint andaepu dandae nostion secatur sequo quae.  
+> Tiam, ad mint andaepu dandae nostion secatur sequo quae.
 > **Note** that you can use _Markdown syntax_ within a blockquote.
+
+## Callouts
+
+> [!NOTE]
+> This is a note callout for general information.
+
+> [!TIP]
+> This is a tip callout for helpful suggestions.
+
+> [!IMPORTANT]
+> This is an important callout for critical information.
+
+> [!WARNING]
+> This is a warning callout for potential issues.
+
+> [!CAUTION]
+> This is a caution callout for dangerous actions.
 
 | Italics   | Bold     | Code   |
 | --------- | -------- | ------ |

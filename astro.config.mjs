@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
+import remarkGithubBlockquoteAlert from "remark-github-blockquote-alert";
 import sitemap from "@astrojs/sitemap";
 
 import { SITE_URL } from "./src/consts";
@@ -37,6 +38,7 @@ export default defineConfig({
     sitemap(),
   ],
   markdown: {
+    remarkPlugins: [remarkGithubBlockquoteAlert],
     rehypePlugins: [
       rehypeSlug,
       [
