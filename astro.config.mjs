@@ -37,7 +37,9 @@ export default defineConfig({
       },
     }),
     mdx(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.match(/\/posts\/\d{4}\/\d{2}\//),
+    }),
   ],
   markdown: {
     remarkPlugins: [
