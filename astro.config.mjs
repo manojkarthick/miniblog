@@ -3,9 +3,9 @@ import { defineConfig } from "astro/config";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import expressiveCode from "astro-expressive-code";
-import icon from "astro-icon";
 import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
+import Icons from "unplugin-icons/vite";
 
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
@@ -35,7 +35,6 @@ export default defineConfig({
         },
       },
     }),
-    icon(),
     mdx(),
     sitemap({
       filter: (page) => !page.match(/\/posts\/\d{4}\/\d{2}\//),
@@ -60,6 +59,6 @@ export default defineConfig({
     ],
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), Icons({ compiler: "astro" })],
   },
 });
