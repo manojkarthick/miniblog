@@ -6,6 +6,8 @@ import expressiveCode from "astro-expressive-code";
 import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
 import sitemap from "@astrojs/sitemap";
 
 import { SITE_URL } from "./src/consts";
@@ -34,6 +36,23 @@ export default defineConfig({
     mdx(),
     sitemap(),
   ],
+  markdown: {
+    rehypePlugins: [
+      rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "append",
+          content: { type: "text", value: "#" },
+          properties: {
+            className: ["anchor-link"],
+            ariaHidden: true,
+            tabIndex: -1,
+          },
+        },
+      ],
+    ],
+  },
   vite: {
     plugins: [tailwindcss()],
   },

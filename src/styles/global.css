@@ -31,6 +31,27 @@
     h6 {
       @apply my-4 font-medium dark:text-white;
     }
+    .anchor-link {
+      @apply ml-1 no-underline opacity-0 transition-opacity;
+      color: inherit;
+    }
+
+    h2:hover .anchor-link,
+    h3:hover .anchor-link,
+    h4:hover .anchor-link,
+    h5:hover .anchor-link,
+    h6:hover .anchor-link {
+      @apply opacity-50;
+    }
+
+    h2:hover .anchor-link:hover,
+    h3:hover .anchor-link:hover,
+    h4:hover .anchor-link:hover,
+    h5:hover .anchor-link:hover,
+    h6:hover .anchor-link:hover {
+      @apply opacity-100;
+    }
+
     :not(pre) > code {
       @apply rounded border bg-zinc-200/50 px-1 py-0.5 font-mono text-sm font-medium whitespace-nowrap text-black dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-white;
     }
