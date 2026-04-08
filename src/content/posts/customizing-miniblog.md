@@ -21,7 +21,7 @@ image: "/static/blog-placeholder.png"
 
 ## Codeblock Syntax Highlighting
 
-Astro has Markdown codeblock syntax highlighting out of the box by using [Shiki](https://shiki.style/) under the hood. To customize the themes used by Shiki, modify the `markdown.shikiConfig.themes` property of the `astro.config.mjs` file to one of the [themes](https://shiki.style/themes) provided by Shiki.
+This blog uses [Expressive Code](https://expressive-code.com/) for syntax highlighting, which provides features like code block titles, line highlighting, and a copy button. To customize the themes, modify the `themes` array in the `expressiveCode()` integration options in `astro.config.mjs`. Expressive Code supports all [Shiki themes](https://shiki.style/themes).
 
 ## OpenGraph Image Support
 
