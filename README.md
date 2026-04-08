@@ -1,85 +1,90 @@
 # Miniblog
 
-**Miniblog** is an opinionated and extremely minimal blogging template built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/), whose design is heavily inspired by [jrmyphlmn.com](https://jrmyphlmn.com/). Incredibly easy to use and customize, you can use **Miniblog** as is, or add as much as you want to it.
+**Miniblog** is an opinionated and minimal blogging template built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/), inspired by [jrmyphlmn.com](https://jrmyphlmn.com/). This fork tracks upstream and includes additional upgrades for a modern toolchain and better template defaults.
 
-- Blog post authoring using [Markdown](https://www.markdownguide.org/) and [MDX](https://mdxjs.com/) for component-style content
-- Code block syntax highlighting with [Shiki](https://github.com/shikijs/shiki)
+- Astro 6 + Tailwind CSS 4
+- Blog posts with [Markdown](https://www.markdownguide.org/) and [MDX](https://mdxjs.com/)
+- Code blocks powered by [Expressive Code](https://expressive-code.com/) (copy button, line highlighting, and more)
 - [RSS](https://en.wikipedia.org/wiki/RSS) feed and sitemap generation
-- SEO optimization, with customizable OpenGraph image support
-- Code formatting with [Prettier](https://prettier.io/)
-- Accessible view transitions
+- SEO metadata with OpenGraph image support
+- Accessible client-side route transitions
 - Dark mode
+- Formatting with [Prettier](https://prettier.io/)
+- CI checks for formatting and Astro type/content validation
 
 ## Getting Started
 
-1. Click "Use this template", the big green button on the top right, to create a new repository with this template.
-
-2. Clone the repository:
+1. Click **Use this template** to create your own repository.
+2. Clone your new repository:
 
 ```bash
 git clone https://github.com/[YOUR_USERNAME]/[YOUR_REPO_NAME].git
 cd [YOUR_REPO_NAME]
 ```
 
-3. Use Node.js 22.12.0 or newer.
-
-4. Install dependencies:
+3. Use Node.js `22.12.0` or newer.
+4. Install dependencies with pnpm:
 
 ```bash
 pnpm install
 ```
 
-5. Start the development server:
+5. Start development:
 
 ```bash
 pnpm dev
 ```
 
-6. Optionally, format your code after making changes:
+6. Run checks before pushing:
 
 ```bash
-pnpm format
+pnpm format:check
+pnpm astro check
+pnpm build
 ```
 
 ## Customization
 
-**Miniblog** purposely keeps itself minimal, relying on no other web framework than Astro, and keeping styling simple through Tailwind and traditional CSS.
-
 ### Site Configuration
 
-Edit the `src/consts.ts` file to update your information and site's metadata:
+Update your site metadata in `src/consts.ts`:
 
 ```ts
-export const SITE_URL = "https://miniblog.nicholasly.com";
-export const SITE_TITLE = "Miniblog";
-export const SITE_DESCRIPTION = "Welcome to my website!";
-
-export const EMAIL = "hello@nicholasly.com";
+export const SITE_URL = "https://your-domain.com";
+export const SITE_TITLE = "Your Blog";
+export const SITE_DESCRIPTION = "Your site description.";
+export const EMAIL = "you@example.com";
 ```
 
 ### Blog Posts
 
-Add new blog posts as Markdown or MDX files in the `src/content/posts/` directory. Use the following frontmatter structure:
+Add Markdown or MDX files in `src/content/posts/`.
+
+Frontmatter fields:
 
 ```yml
 ---
 title: "Lorem Ipsum"
 description: "Lorem ipsum dolor sit amet."
-date: "Nov 06 2024"
+date: "2024-11-06" # YYYY-MM-DD
+image: "/static/blog-placeholder.png" # optional
 ---
 ```
 
+The content schema lives in `src/content.config.ts`.
+
 ### Markdown Styling
 
-All Markdown-specific CSS styling is customizable in `src/styles/global.css`:
+Customize Markdown styles in `src/styles/global.css`.
 
-```css
-@layer components {
-  article {
-    /* ... */
-  }
-}
-```
+## Template Changes In This Fork
+
+These merged PRs are already included for users starting from this template:
+
+- [#1](https://github.com/manojkarthick/miniblog/pull/1) Migrate from npm to pnpm, add lockfile, and configure Corepack compatibility.
+- [#2](https://github.com/manojkarthick/miniblog/pull/2) Upgrade to Astro 6 and Tailwind CSS 4, including content layer and API migrations.
+- [#3](https://github.com/manojkarthick/miniblog/pull/3) Add GitHub Actions checks for `pnpm format:check` and `pnpm astro check`.
+- [#4](https://github.com/manojkarthick/miniblog/pull/4) Replace Shiki with Expressive Code and enable richer code block UX.
 
 ## License
 
