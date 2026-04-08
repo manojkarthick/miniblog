@@ -85,6 +85,9 @@ These merged PRs are already included for users starting from this template:
 - [#2](https://github.com/manojkarthick/miniblog/pull/2) Upgrade to Astro 6 and Tailwind CSS 4, including content layer and API migrations.
 - [#3](https://github.com/manojkarthick/miniblog/pull/3) Add GitHub Actions checks for `pnpm format:check` and `pnpm astro check`.
 - [#4](https://github.com/manojkarthick/miniblog/pull/4) Replace Shiki with Expressive Code and enable richer code block UX.
+- [#6](https://github.com/manojkarthick/miniblog/pull/6) Add anchor links to post section headings for easier deep-linking.
+- [#7](https://github.com/manojkarthick/miniblog/pull/7) Add GitHub-style markdown callouts (`[!NOTE]`, `[!TIP]`, `[!WARNING]`, etc.).
+- [#8](https://github.com/manojkarthick/miniblog/pull/8) Persist light/dark theme selection and keep code block themes in sync.
 
 ## License
 
