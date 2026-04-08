@@ -43,6 +43,9 @@ importers:
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
+      remark-github-blockquote-alert:
+        specifier: ^2.1.0
+        version: 2.1.0
       tailwind-merge:
         specifier: ^3.5.0
         version: 3.5.0
@@ -3168,6 +3171,13 @@ packages:
         integrity: sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg==,
       }
 
+  remark-github-blockquote-alert@2.1.0:
+    resolution:
+      {
+        integrity: sha512-J392jmIP684d7iGsENN0uguL10IGbRdc8bTUSrd/jOLzdWkwg721Fj3JPQGN8tF6fTIrE5HHOIA3nBuwuaeuPQ==,
+      }
+    engines: { node: ">=16" }
+
   remark-mdx@3.1.0:
     resolution:
       {
@@ -6174,6 +6184,10 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
+
+  remark-github-blockquote-alert@2.1.0:
+    dependencies:
+      unist-util-visit: 5.1.0
 
   remark-mdx@3.1.0:
     dependencies:
