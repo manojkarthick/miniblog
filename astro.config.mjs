@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import expressiveCode from "astro-expressive-code";
+import icon from "astro-icon";
 import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -34,6 +35,7 @@ export default defineConfig({
         },
       },
     }),
+    icon(),
     mdx(),
     sitemap({
       filter: (page) => !page.match(/\/posts\/\d{4}\/\d{2}\//),
