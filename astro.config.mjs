@@ -14,9 +14,12 @@ import sitemap from "@astrojs/sitemap";
 
 import { SITE_URL } from "./src/consts";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE_URL,
+
   integrations: [
     expressiveCode({
       plugins: [pluginLineNumbers(), pluginCollapsibleSections()],
@@ -40,6 +43,7 @@ export default defineConfig({
       filter: (page) => !page.match(/\/posts\/\d{4}\/\d{2}\//),
     }),
   ],
+
   markdown: {
     remarkPlugins: [remarkGithubBlockquoteAlert],
     rehypePlugins: [
@@ -58,7 +62,10 @@ export default defineConfig({
       ],
     ],
   },
+
   vite: {
     plugins: [tailwindcss(), Icons({ compiler: "astro" })],
   },
+
+  adapter: cloudflare(),
 });
