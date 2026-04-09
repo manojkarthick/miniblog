@@ -93,6 +93,7 @@ These PRs are included in this fork for users starting from this template:
 - [#10](https://github.com/manojkarthick/miniblog/pull/10) Add `::github` directive cards for repos/users with miniblog-native styling.
 - [#13](https://github.com/manojkarthick/miniblog/pull/13) Replace the remark directive plugin with a single self-contained `GithubCard.astro` MDX component.
 - [#14](https://github.com/manojkarthick/miniblog/pull/14) Replace `astro-icon` with `unplugin-icons` for homepage social icons while preserving styling and hover behavior.
+- [#16](https://github.com/manojkarthick/miniblog/pull/16) Fix GitHub card dark mode (use explicit `.dark` class selectors instead of `dark:` variants), improve light mode contrast, fix list indentation, and add styled task list checkboxes.
 
 ## License
 
