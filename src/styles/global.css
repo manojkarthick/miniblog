@@ -137,7 +137,7 @@
       @apply list-none;
     }
     .task-list-item input[type="checkbox"] {
-      @apply -ml-5 mr-2 h-4 w-4 appearance-none rounded border-2 border-zinc-400 bg-zinc-100 align-middle dark:border-zinc-400 dark:bg-transparent;
+      @apply mr-2 -ml-5 h-4 w-4 appearance-none rounded border-2 border-zinc-400 bg-zinc-100 align-middle dark:border-zinc-400 dark:bg-transparent;
     }
     .task-list-item input[type="checkbox"]:checked {
       @apply border-zinc-600 bg-zinc-600;
