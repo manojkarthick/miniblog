@@ -79,6 +79,10 @@ The content schema lives in `src/content.config.ts`.
 
 Customize Markdown styles in `src/styles/global.css`.
 
+### Fonts
+
+Fonts are managed with Astro v6 Fonts API (`fonts` in `astro.config.mjs`) using the local provider and loaded via `<Font />` in `src/layouts/Layout.astro`.
+
 ## Template Changes In This Fork
 
 These PRs are included in this fork for users starting from this template:

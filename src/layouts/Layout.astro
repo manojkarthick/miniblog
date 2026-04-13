@@ -1,4 +1,5 @@
 ---
+import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import { cn } from "../lib/utils";
@@ -32,21 +33,8 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Font preloads -->
-    <link
-      rel="preload"
-      href="/fonts/geist-variable.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/geist-mono-variable.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-geist-mono" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href={resolvedCanonicalURL} />
