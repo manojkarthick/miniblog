@@ -1,0 +1,20 @@
+minimum_prek_version: "0.3.0"
+
+repos:
+  - repo: local
+    hooks:
+      - id: astro-check
+        name: Astro Check (full project)
+        language: system
+        entry: pnpm exec astro check
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      - id: prettier-check
+        name: Prettier Check (staged files)
+        language: system
+        entry: pnpm exec prettier --check --ignore-unknown
+        pass_filenames: true
+        stages: [pre-commit]
+        files: "\\.(astro|css|js|jsx|json|md|mdx|mjs|ts|tsx|yaml|yml)$"

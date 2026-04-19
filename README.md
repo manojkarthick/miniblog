@@ -45,6 +45,8 @@ pnpm astro check
 pnpm build
 ```
 
+Pre-commit uses `prek`: `prek run` (staged) and `prek run --all-files` (full repo).
+
 ## Customization
 
 ### Site Configuration
