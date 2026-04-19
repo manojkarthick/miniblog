@@ -76,9 +76,30 @@ You can render user profile cards too:
 
 <GithubCard user="withastro" />
 
-| Italics   | Bold     | Code   |
-| --------- | -------- | ------ |
-| _italics_ | **bold** | `code` |
+## Tables
+
+| Feature | Markdown syntax | Rendered example |
+| ------- | --------------- | ---------------- |
+| Italics | `_italics_`     | _italics_        |
+| Bold    | `**bold**`      | **bold**         |
+| Code    | `` `code` ``    | `code`           |
+
+## Footnotes
+
+Use footnotes to add supporting details without interrupting the sentence flow.[^markdown-footnote]
+
+You can reference the same note from multiple places when needed.[^markdown-footnote]
+
+This is a different footnote.[^markdown-different-footnote]
+
+[^markdown-footnote]: Footnotes are written with a matching label, then rendered at the bottom of the post with a backlink.
+[^markdown-different-footnote]: They render with a different number.
+
+## Expressive Code Features
+
+This blog uses [Expressive Code](https://expressive-code.com/) for syntax highlighting, which provides several useful features beyond basic highlighting.
+
+### Regular code blocks
 
 ```html
 <!doctype html>
@@ -92,10 +113,6 @@ You can render user profile cards too:
   </body>
 </html>
 ```
-
-## Expressive Code Features
-
-This blog uses [Expressive Code](https://expressive-code.com/) for syntax highlighting, which provides several useful features beyond basic highlighting.
 
 ### Code Block Titles
 
