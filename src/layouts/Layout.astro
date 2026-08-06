@@ -25,7 +25,7 @@ const {
 } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="en" transition:name="root" transition:animate="none">
   <head>
     <!-- Global Metadata -->
     <meta charset="utf-8" />
@@ -97,7 +97,9 @@ const {
   >
     <div class={cn("max-w-xl mx-auto p-4", className)}>
       <Header />
-      <slot />
+      <main transition:animate="slide">
+        <slot />
+      </main>
     </div>
   </body>
 </html>
